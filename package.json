@@ -42,9 +42,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Edersj02/capacitor-bakground-service.git"
+    "url": "https://github.com/TransportationAmericaInc/geobackground.git"
   },
   "bugs": {
-    "url": "https://github.com/Edersj02/capacitor-bakground-service.git/issues"
+    "url": "https://github.com/TransportationAmericaInc/geobackground.git/issues"
   }
 }
