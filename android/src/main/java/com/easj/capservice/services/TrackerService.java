@@ -126,8 +126,8 @@ public class TrackerService extends Service {
                                     data.put("driverid", sessionData.getDriverId());
                                     data.put("name", sessionData.getDriverName());
                                     data.put("vehicle", sessionData.getPin());
-                                    data.put("dateTime", dateTime);
-                                    data.put("driverstatus", preferences.getDriverStatus());
+                                    data.put("dateTime", dateTime.toString());
+                                    //data.put("driverstatus", preferences.getDriverStatus());
                                     obj.put("data", data);
                                     if (mSocket.connected()) {
                                         Log.d(SERVICE_NAME, obj.toString());

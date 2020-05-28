@@ -101,7 +101,7 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
         preferences = TrackerPreferences.getInstance(context);
         SessionData sessionData = new SessionData();
         requestChangeBatteryOptimizations();
-        int id = Integer.parseInt(call.getString("diverid"));
+        int id = Integer.parseInt(call.getString("driverid"));
         String name = call.getString("drivername");
         int pin = Integer.parseInt(call.getString("pin"));
         String token = call.getString("token");
