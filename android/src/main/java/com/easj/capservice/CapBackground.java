@@ -108,7 +108,7 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
         sessionData.setDriverId(call.getString("driver_id"));
         sessionData.setDriverName(call.getString("driver_name"));
         sessionData.setVehicleId(call.getString("vehicle_id"));
-        sessionData.setDriverName(call.getString("vehicle_name"));
+        sessionData.setVehicleName(call.getString("vehicle_name"));
         sessionData.setRouteId(call.getString("route_id"));
         sessionData.setRouteName(call.getString("route_name"));
         sessionData.setSocketUrl(call.getString("socket_url"));

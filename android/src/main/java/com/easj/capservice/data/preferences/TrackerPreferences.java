@@ -20,11 +20,6 @@ public class TrackerPreferences implements ITrackerPreferences {
     private static final String VEHICLE_NAME = CLASS_NAME + ".driverName";
     private static final String ROUTE_ID = CLASS_NAME + ".routeId";
     private static final String ROUTE_NAME = CLASS_NAME + ".routeName";
-    private static final String LATITUDE = CLASS_NAME + ".latitude";
-    private static final String LONGITUDE = CLASS_NAME + ".longitude";
-    private static final String SPEED = CLASS_NAME + ".speed";
-    private static final String DATE = CLASS_NAME + ".date";
-    private static final String STATE = CLASS_NAME + ".state";
     private static final String SOCKETURL = CLASS_NAME + ".socketUrl";
     private static final String EVENTNEWPOSITION = CLASS_NAME + ".eventNewPosition";
     private static final String TOKEN = CLASS_NAME + ".token";
@@ -53,7 +48,7 @@ public class TrackerPreferences implements ITrackerPreferences {
             editor.putString(DRIVER_ID, data.getDriverId());
             editor.putString(DRIVER_NAME, data.getDriverName());
             editor.putString(VEHICLE_ID, data.getVehicleId());
-            editor.putString(VEHICLE_NAME, data.getDriverName());
+            editor.putString(VEHICLE_NAME, data.getVehicleId());
             editor.putString(ROUTE_ID, data.getRouteId());
             editor.putString(ROUTE_NAME, data.getRouteName());
             editor.putString(SOCKETURL, data.getSocketUrl());
