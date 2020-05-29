@@ -2,17 +2,33 @@ package com.easj.capservice.entities;
 
 public class SessionData {
 
-    private int driverId;
+    private String driverId;
 
-    private String DriverName;
+    private String driverName;
 
-    private int pin;
+    private String vehicleId;
 
-    private String token;
+    private String vehicleName;
 
-    private String url;
+    private String routeId;
+
+    private String routeName;
+
+    private Double latitude;
+
+    private Double longitude;
+
+    private Integer speed;
+
+    private String date;
+
+    private Integer state;
 
     private String socketUrl;
+
+    private String eventNewPosition;
+
+    private String token;
 
     private DriverStatus driverStatus;
 
@@ -20,53 +36,109 @@ public class SessionData {
         super();
     }
 
-    public SessionData(int driverId, String DriverName, int pin, String token, String url, String socketUrl) {
+    public SessionData(String driverId, String driverName, String vehicleId, String vehicleName, String routeId, String routeName, Double latitude, Double longitude, Integer speed, String date, Integer state, String socketUrl, String eventNewPosition, String token) {
         this.driverId = driverId;
-        this.DriverName = DriverName;
-        this.pin = pin;
-        this.token = token;
-        this.url = url;
+        this.driverName = driverName;
+        this.vehicleId = vehicleId;
+        this.vehicleName = vehicleName;
+        this.routeId = routeId;
+        this.routeName = routeName;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.speed = speed;
+        this.date = date;
+        this.state = state;
         this.socketUrl = socketUrl;
+        this.eventNewPosition = eventNewPosition;
+        this.token = token;
     }
 
-    public int getDriverId() {
+    public String getDriverId() {
         return driverId;
     }
 
-    public void setDriverId(int driverId) {
+    public void setDriverId(String driverId) {
         this.driverId = driverId;
     }
 
     public String getDriverName() {
-        return DriverName;
+        return driverName;
     }
 
     public void setDriverName(String driverName) {
-        this.DriverName = driverName;
+        this.driverName = driverName;
     }
 
-    public int getPin() {
-        return pin;
+    public String getVehicleId() {
+        return vehicleId;
     }
 
-    public void setPin(int pin) {
-        this.pin = pin;
+    public void setVehicleId(String vehicleId) {
+        this.vehicleId = vehicleId;
     }
 
-    public String getToken() {
-        return token;
+    public String getVehicleName() {
+        return vehicleName;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setVehicleName(String vehicleName) {
+        this.vehicleName = vehicleName;
     }
 
-    public String getUrl() {
-        return url;
+    public String getRouteId() {
+        return routeId;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setRouteId(String routeId) {
+        this.routeId = routeId;
+    }
+
+    public String getRouteName() {
+        return routeName;
+    }
+
+    public void setRouteName(String routeName) {
+        this.routeName = routeName;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Integer getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(Integer speed) {
+        this.speed = speed;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 
     public String getSocketUrl() {
@@ -75,6 +147,22 @@ public class SessionData {
 
     public void setSocketUrl(String socketUrl) {
         this.socketUrl = socketUrl;
+    }
+
+    public String getEventNewPosition() {
+        return eventNewPosition;
+    }
+
+    public void setEventNewPosition(String eventNewPosition) {
+        this.eventNewPosition = eventNewPosition;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public DriverStatus getDriverStatus() {

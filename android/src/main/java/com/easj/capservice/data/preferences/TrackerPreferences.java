@@ -16,10 +16,18 @@ public class TrackerPreferences implements ITrackerPreferences {
     private static final String TRACKER_PREFS_NAME = CLASS_NAME + ".preferences";
     private static final String DRIVER_ID = CLASS_NAME + ".driverId";
     private static final String DRIVER_NAME = CLASS_NAME + ".driverName";
-    private static final String PIN = CLASS_NAME + ".pin";
+    private static final String VEHICLE_ID = CLASS_NAME + ".vehicleId";
+    private static final String VEHICLE_NAME = CLASS_NAME + ".driverName";
+    private static final String ROUTE_ID = CLASS_NAME + ".routeId";
+    private static final String ROUTE_NAME = CLASS_NAME + ".routeName";
+    private static final String LATITUDE = CLASS_NAME + ".latitude";
+    private static final String LONGITUDE = CLASS_NAME + ".longitude";
+    private static final String SPEED = CLASS_NAME + ".speed";
+    private static final String DATE = CLASS_NAME + ".date";
+    private static final String STATE = CLASS_NAME + ".state";
+    private static final String SOCKETURL = CLASS_NAME + ".socketUrl";
+    private static final String EVENTNEWPOSITION = CLASS_NAME + ".eventNewPosition";
     private static final String TOKEN = CLASS_NAME + ".token";
-    private static final String URL = CLASS_NAME + ".url";
-    private static final String SOCKET_URL = CLASS_NAME + ".socketUrl";
     private static final String DRIVER_STATUS = CLASS_NAME + ".driverStatus";
 
     private static TrackerPreferences INSTANCE;
@@ -42,12 +50,20 @@ public class TrackerPreferences implements ITrackerPreferences {
         if (data != null) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
-            editor.putInt(DRIVER_ID, data.getDriverId());
+            editor.putString(DRIVER_ID, data.getDriverId());
             editor.putString(DRIVER_NAME, data.getDriverName());
-            editor.putInt(PIN, data.getPin());
+            editor.putString(VEHICLE_ID, data.getVehicleId());
+            editor.putString(VEHICLE_NAME, data.getDriverName());
+            editor.putString(ROUTE_ID, data.getRouteId());
+            editor.putString(ROUTE_NAME, data.getRouteName());
+            editor.putFloat(LATITUDE, Float.valueOf(String.valueOf(data.getLatitude())));
+            editor.putFloat(LONGITUDE, Float.valueOf(String.valueOf(data.getLongitude())));
+            editor.putInt(SPEED, data.getSpeed());
+            editor.putString(DATE, data.getDate());
+            editor.putInt(STATE, data.getState());
+            editor.putString(SOCKETURL, data.getSocketUrl());
+            editor.putString(EVENTNEWPOSITION, data.getEventNewPosition());
             editor.putString(TOKEN, data.getToken());
-            editor.putString(URL, data.getUrl());
-            editor.putString(SOCKET_URL, data.getSocketUrl());
             editor.apply();
         }
     }
@@ -76,12 +92,20 @@ public class TrackerPreferences implements ITrackerPreferences {
     @Override
     public SessionData getSessionData() {
         return new SessionData(
-                preferences.getInt(DRIVER_ID, 0),
+                preferences.getString(DRIVER_ID, ""),
                 preferences.getString(DRIVER_NAME, ""),
-                preferences.getInt(PIN, 0),
-                preferences.getString(TOKEN, ""),
-                preferences.getString(URL, ""),
-                preferences.getString(SOCKET_URL, "")
+                preferences.getString(VEHICLE_ID, ""),
+                preferences.getString(VEHICLE_NAME, ""),
+                preferences.getString(ROUTE_ID, ""),
+                preferences.getString(ROUTE_NAME, ""),
+                Double.valueOf(String.valueOf(preferences.getFloat(LATITUDE, 0))),
+                Double.valueOf(String.valueOf(preferences.getFloat(LONGITUDE, 0))),
+                preferences.getInt(SPEED, 0),
+                preferences.getString(DATE, ""),
+                preferences.getInt(STATE, 1),
+                preferences.getString(SOCKETURL, ""),
+                preferences.getString(EVENTNEWPOSITION, ""),
+                preferences.getString(TOKEN, "")
         );
     }
 }

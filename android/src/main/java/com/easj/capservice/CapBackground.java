@@ -53,13 +53,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @NativePlugin(
-    permissions={
-            Manifest.permission.ACCESS_FINE_LOCATION
-    }
+        permissions = {
+                Manifest.permission.ACCESS_FINE_LOCATION
+        }
 )
-public class CapBackground extends Plugin implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+public class CapBackground extends Plugin implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    // ========================================== Variables ========================================
     private static final String CLASS_NAME = CapBackground.class.getName();
 
     private Context context;
@@ -82,6 +82,9 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
 
     private Timer timer;
 
+
+    // ========================================== Plugins Methods ==================================
+    /* Detiene el servicio en background */
     @PluginMethod()
     public void stopBackgroundService(PluginCall call) {
         context = this.getContext();
@@ -94,26 +97,28 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
         call.resolve(ret);
     }
 
+    /* Inicia el servicio en background */
     @PluginMethod()
     public void startBackgroundService(PluginCall call) {
         context = this.getContext();
         activity = getActivity();
         preferences = TrackerPreferences.getInstance(context);
-        SessionData sessionData = new SessionData();
         requestChangeBatteryOptimizations();
-        int id = Integer.parseInt(call.getString("driverid"));
-        String name = call.getString("drivername");
-        int pin = Integer.parseInt(call.getString("pin"));
-        String token = call.getString("token");
-        String url = call.getString("url");
-        String socketUrl = call.getString("socketurl");
-        sessionData.setDriverId(id);
-        sessionData.setDriverName(name);
-        sessionData.setPin(pin);
-        sessionData.setToken(token);
-        sessionData.setUrl(url);
-        sessionData.setSocketUrl(socketUrl);
-        Log.d(CLASS_NAME, "Token -----" + sessionData.getToken());
+        SessionData sessionData = new SessionData();
+        sessionData.setDriverId(call.getString("driver_id"));
+        sessionData.setDriverName(call.getString("driver_name"));
+        sessionData.setVehicleId(call.getString("vehicle_id"));
+        sessionData.setDriverName(call.getString("vehicle_name"));
+        sessionData.setRouteId(call.getString("route_id"));
+        sessionData.setRouteName(call.getString("route_name"));
+        sessionData.setLatitude(call.getDouble("latitude"));
+        sessionData.setLongitude(call.getDouble("longitude"));
+        sessionData.setSpeed(call.getInt("speed"));
+        sessionData.setDate(call.getString("date"));
+        sessionData.setState(call.getInt("state"));
+        sessionData.setSocketUrl(call.getString("socket_url"));
+        sessionData.setEventNewPosition(call.getString("event_new_position"));
+        sessionData.setToken(call.getString("token"));
         preferences.save(sessionData);
         if (networkStatus()) {
             // manageDeniedPermission();
@@ -131,6 +136,7 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
         call.resolve(ret);
     }
 
+    /* Setear cambio de estado del driver */
     @PluginMethod()
     public void setDriverStatus(PluginCall call) {
         context = this.getContext();
@@ -143,13 +149,59 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
         call.resolve(ret);
     }
 
-    /*
-     * Incluye la App en la lista blanca para ignorar el consumo de bateria cuando el teléfono este
-     * inactivo
-     * */
-    private void requestChangeBatteryOptimizations ()
-    {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+    // ========================================== Override =========================================
+    @Override
+    /* Verificar Permisos */
+    protected void handleRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        PluginCall savedCall = getSavedCall();
+        if (savedCall == null) {
+            Log.d(CLASS_NAME, "No stored plugin call for permissions request result");
+            return;
+        }
+
+        for (int result : grantResults) {
+            if (result == PackageManager.PERMISSION_DENIED) {
+                savedCall.error("User denied permission");
+                return;
+            }
+        }
+
+        if (requestCode == REQUEST_LOCATION) {
+            startLocationUpdates();
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (isLocationPermissionGranted()) {
+            // Obtenemos la última ubicación al ser la primera vez
+            //processLastLocation();
+            // Iniciamos las actualizaciones de ubicación
+            startLocationUpdates();
+        } else {
+            manageDeniedPermission();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.show(context, "Code connection error:" + connectionResult.getErrorCode());
+    }
+
+
+    // ========================================== Other Functions =========================================
+
+    /* Incluye la App en la lista blanca para ignorar el consumo de bateria cuando el teléfono este inactivo */
+    private void requestChangeBatteryOptimizations() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent();
             String packageName = context.getPackageName();
             PowerManager pm = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
@@ -163,17 +215,14 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
         }
     }
 
-    /*
-     * Valida el estado de la conexión a internet
-     * */
+    /* Valida el estado de la conexión a internet */
     private boolean networkStatus() {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if ( networkInfo != null && networkInfo.isConnected() ) {
+        if (networkInfo != null && networkInfo.isConnected()) {
             return true;
         } else {
             AlertDialog dialog = new AlertDialog.Builder(activity).create();
-            // dialog.setTitle("Trip 2");
             dialog.setMessage("Please activate an internet connection!");
             dialog.setCancelable(false);
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
@@ -185,6 +234,7 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
         }
     }
 
+    /* Instancia de API de google */
     private synchronized void buildGoogleApiClient() {
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(context)
@@ -210,7 +260,7 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
         mLocationSettingsRequest = builder.build();
     }
 
-    private void checkLocationSettings(){
+    private void checkLocationSettings() {
         LocationServices.getSettingsClient(context).checkLocationSettings(mLocationSettingsRequest)
                 .addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
                     @Override
@@ -231,9 +281,9 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
                                                 activity,
                                                 REQUEST_CHECK_SETTINGS
                                         );
+                                    } catch (IntentSender.SendIntentException e) {
+                                    } catch (ClassCastException e) {
                                     }
-                                    catch (IntentSender.SendIntentException e) {}
-                                    catch (ClassCastException e){}
                                     break;
                                 case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                                     // Location settings are not satisfied. However, we have no way to fix the
@@ -249,37 +299,10 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
         pluginRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_LOCATION);
     }
 
-    @Override
-    protected void handleRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        // super.handleRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d(CLASS_NAME, requestCode + "");
-
-        Log.d(CLASS_NAME, "handling request perms result");
-        PluginCall savedCall = getSavedCall();
-        if (savedCall == null) {
-            Log.d(CLASS_NAME, "No stored plugin call for permissions request result");
-            return;
-        }
-
-        for(int result : grantResults) {
-            if (result == PackageManager.PERMISSION_DENIED) {
-                savedCall.error("User denied permission");
-                Log.d(CLASS_NAME, "User denied permission");
-                return;
-            }
-        }
-
-        if (requestCode == REQUEST_LOCATION) {
-            startLocationUpdates();
-        }
-    }
-
     private void startLocationUpdates() {
         Intent intent = new Intent(context, TrackerService.class);
         intent.setAction(Constans.START_FOREGROUND_ACTION);
-        pendingIntent = PendingIntent.getService(context, 0,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+        pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         LocationServices.getFusedLocationProviderClient(context).requestLocationUpdates(
                 mLocationRequest, pendingIntent
         );
@@ -313,30 +336,6 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION);
         return permission == PackageManager.PERMISSION_GRANTED;
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        if (isLocationPermissionGranted()) {
-            // Obtenemos la última ubicación al ser la primera vez
-            //processLastLocation();
-            // Iniciamos las actualizaciones de ubicación
-            startLocationUpdates();
-        } else {
-            manageDeniedPermission();
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.show(context,"Code connection error:" + connectionResult.getErrorCode());
     }
 
     private void startLocationsTimer() {

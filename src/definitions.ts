@@ -9,12 +9,20 @@ declare module "@capacitor/core" {
 export interface CapBackground {
   stopBackgroundService(): Promise<{}>;
   startBackgroundService(options: {
-    driverId: string,
-    driverName: string,
-    pin: string,
+    driver_id: string,
+    driver_name: string,
+    vehicle_id: string,
+    vehicle_name: string,
+    route_id: string,
+    route_name: string,
+    latitude: Number,
+    longitude: Number,
+    speed: Number,
+    date: string,
+    state: Number,
+    socket_url: string,
+    event_new_position: string,
     token: string,
-    url: string,
-    socketUrl: string
   }): Promise<{}>;
   setDriverStatus(options: {driverstatus: any}): Promise<{}>;
 }

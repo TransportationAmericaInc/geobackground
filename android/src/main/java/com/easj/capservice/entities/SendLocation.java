@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class SendLocation {
 
     @SerializedName("driverid")
-    int DriverId;
+    String DriverId;
     @SerializedName("latitude")
     Double Latitude;
     @SerializedName("longitude")
@@ -17,11 +17,11 @@ public class SendLocation {
         super();
     }
 
-    public int getDriverId() {
+    public String getDriverId() {
         return DriverId;
     }
 
-    public void setDriverId(int driverId) {
+    public void setDriverId(String driverId) {
         DriverId = driverId;
     }
 

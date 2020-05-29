@@ -45,26 +45,16 @@ public class TrackerService extends Service {
     private ICloudDataSource dataSource;
     private SendLocation sendLocation;
     private SessionData sessionData;
-
     private Location location;
-
     private Context context;
-
     private Timer timer;
     private TimerTask task;
-    final Handler handler = new Handler();
-
     private boolean swToast = false;
 
-    public Socket mSocket;
-    {
-        try{
-            mSocket = IO.socket("https://trackingnode.herokuapp.com/");
-        } catch (URISyntaxException e) {
-            Log.d(SERVICE_NAME, "Error socket: " + e.getMessage());
-        }
-    }
+    final Handler handler = new Handler();
 
+
+    public Socket mSocket;
     @Override
     public void onCreate() {
         // Start up the thread running the service. Note that we create a
@@ -74,25 +64,34 @@ public class TrackerService extends Service {
         Toast.show(this, "Service starting in background");
         context = this;
         swToast = true;
+
         preferences = TrackerPreferences.getInstance(getApplicationContext());
-        mSocket.connect();
-        mSocket.io().reconnection(true);
         if (preferences != null) {
             sessionData = preferences.getSessionData();
-            dataSource = CloudDataSource.getInstance(sessionData.getUrl());
+            try {
+                mSocket = IO.socket(sessionData.getSocketUrl());
+                mSocket.connect();
+                mSocket.io().reconnection(true);
+            } catch (URISyntaxException e) {
+                Log.d(SERVICE_NAME, "Error socket: " + e.getMessage());
+            }
+            dataSource = CloudDataSource.getInstance(sessionData.getSocketUrl());
         }
         if (Build.VERSION.SDK_INT >= 26) {
             createChanelIdNotifications();
-            Notification notification = new NotificationCompat.Builder(this, CHANEL_ID)
+            Notification notification = new NotificationCompat
+                    .Builder(this, CHANEL_ID)
                     .setContentTitle("Service in background")
                     .setContentText("Running...").build();
 
             startForeground(1, notification);
         }
+        /*
         if (timer == null) {
             timer = new Timer();
             sentLocationTracker();
         }
+        */
 
     }
 
@@ -114,24 +113,22 @@ public class TrackerService extends Service {
                                 sessionData = preferences.getSessionData();
                                 if (!sessionData.getToken().equals("")) {
                                     JSONObject obj = new JSONObject();
-                                    obj.put("id", sessionData.getDriverId());
-                                    obj.put("lat", location.getLatitude());
-                                    obj.put("lng", location.getLongitude());
-                                    obj.put("speed", location.getSpeed());
-                                    obj.put("accuracy", location.getAccuracy());
-                                    obj.put("altitude", location.getAltitude());
-                                    obj.put("time", location.getTime());
-                                    JSONObject data = new JSONObject();
-                                    Date dateTime = new Date();
-                                    data.put("driverid", sessionData.getDriverId());
-                                    data.put("name", sessionData.getDriverName());
-                                    data.put("vehicle", sessionData.getPin());
-                                    data.put("dateTime", dateTime.toString());
-                                    //data.put("driverstatus", preferences.getDriverStatus());
-                                    obj.put("data", data);
+                                    obj.put("driver_id", sessionData.getDriverId());
+                                    obj.put("driver_name", sessionData.getDriverName());
+                                    obj.put("vehicle_id", sessionData.getVehicleId());
+                                    obj.put("vehicle_name", sessionData.getDriverName());
+                                    obj.put("route_id", sessionData.getRouteId());
+                                    obj.put("route_name", sessionData.getRouteName());
+                                    obj.put("latitude", sessionData.getLatitude());
+                                    obj.put("longitude", sessionData.getLongitude());
+                                    obj.put("speed", sessionData.getSpeed());
+                                    obj.put("date", sessionData.getDate());
+                                    obj.put("state", sessionData.getState());
+                                    obj.put("date", sessionData.getSocketUrl());
+                                    obj.put("token", sessionData.getToken());
                                     if (mSocket.connected()) {
                                         Log.d(SERVICE_NAME, obj.toString());
-                                        mSocket.emit("newLocation", obj);
+                                        mSocket.emit(sessionData.getEventNewPosition(), obj);
                                         swToast = true;
                                         Log.d(SERVICE_NAME, "Send Location Socket");
                                     } else {
@@ -158,7 +155,7 @@ public class TrackerService extends Service {
                 }
             }
         } catch (Exception ex) {
-            Toast.show(this, "Unknown error: "+ex.getMessage());
+            Toast.show(this, "Unknown error: " + ex.getMessage());
         }
         return START_STICKY;
     }
@@ -176,7 +173,7 @@ public class TrackerService extends Service {
         Toast.show(this, "Service in background done");
     }
 
-    private void createChanelIdNotifications(){
+    private void createChanelIdNotifications() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -195,6 +192,7 @@ public class TrackerService extends Service {
         }
     }
 
+    /*
     private void sentLocationTracker() {
         task = new TimerTask() {
             @Override
@@ -202,9 +200,6 @@ public class TrackerService extends Service {
                 Log.d(SERVICE_NAME, "Init timer service locations");
                 try {
                     if (location != null) {
-                        // preferences = TrackerPreferences.getInstance(getApplicationContext());
-                        // sessionData = preferences.getSessionData();
-                        Log.d(SERVICE_NAME, "Token -----" + sessionData.getToken());
                         if (!sessionData.getToken().equals("")) {
                             sendLocation = new SendLocation();
                             sendLocation.setDriverId(sessionData.getDriverId());
@@ -223,49 +218,5 @@ public class TrackerService extends Service {
         };
         timer.schedule(task, 4000L, 70000L);
     }
-
-//    private void sentLocationTracker() {
-//        TimerTask task = new TimerTask() {
-//            @Override
-//            public void run() {
-//                Log.d(SERVICE_NAME, "Init timer locations");
-//                handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            if (location != null) {
-//                                preferences = TrackerPreferences.getInstance(getApplicationContext());
-//                                sessionData = preferences.getSessionData();
-//                                Log.d(SERVICE_NAME, "Token -----" + sessionData.getToken());
-//                                if (!sessionData.getToken().equals("")) {
-//                                    sendLocation = new SendLocation();
-//                                    sendLocation.setDriverId(sessionData.getDriverId());
-//                                    sendLocation.setLatitude(location.getLatitude());
-//                                    sendLocation.setLongitude(location.getLongitude());
-//                                    sendLocation.setSpeed(location.getSpeed());
-//                                    dataSource.sendLocationTracker("", sessionData.getToken(), sendLocation);
-//                                } else {
-//                                    Log.d(SERVICE_NAME, "No Send Location ----");
-//                                }
-//                            }
-//                        } catch (Exception ex) {
-//                            Log.d(SERVICE_NAME, "Error timer: " + ex.getMessage());
-//                        }
-//                    }
-//                });
-//            }
-//        };
-//        timer.schedule(task, 4000L, 60000L);
-//    }
-
-    /**
-     * enabledMockLocation
-     * @return true if mock location is enabled, false if is not enabled
-     */
-    private boolean enabledMockLocation(Location location) {
-        Log.d("MOCK_LOCATION", Settings.Secure.getString(getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION));
-        return Settings.Secure.getString(getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION)
-                .equals("1");
-    }
-
+    */
 }
