@@ -56,11 +56,6 @@ public class TrackerPreferences implements ITrackerPreferences {
             editor.putString(VEHICLE_NAME, data.getDriverName());
             editor.putString(ROUTE_ID, data.getRouteId());
             editor.putString(ROUTE_NAME, data.getRouteName());
-            editor.putFloat(LATITUDE, Float.valueOf(String.valueOf(data.getLatitude())));
-            editor.putFloat(LONGITUDE, Float.valueOf(String.valueOf(data.getLongitude())));
-            editor.putInt(SPEED, data.getSpeed());
-            editor.putString(DATE, data.getDate());
-            editor.putInt(STATE, data.getState());
             editor.putString(SOCKETURL, data.getSocketUrl());
             editor.putString(EVENTNEWPOSITION, data.getEventNewPosition());
             editor.putString(TOKEN, data.getToken());
@@ -98,11 +93,6 @@ public class TrackerPreferences implements ITrackerPreferences {
                 preferences.getString(VEHICLE_NAME, ""),
                 preferences.getString(ROUTE_ID, ""),
                 preferences.getString(ROUTE_NAME, ""),
-                Double.valueOf(String.valueOf(preferences.getFloat(LATITUDE, 0))),
-                Double.valueOf(String.valueOf(preferences.getFloat(LONGITUDE, 0))),
-                preferences.getInt(SPEED, 0),
-                preferences.getString(DATE, ""),
-                preferences.getInt(STATE, 1),
                 preferences.getString(SOCKETURL, ""),
                 preferences.getString(EVENTNEWPOSITION, ""),
                 preferences.getString(TOKEN, "")

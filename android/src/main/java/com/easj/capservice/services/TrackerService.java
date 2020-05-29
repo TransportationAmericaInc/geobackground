@@ -119,11 +119,13 @@ public class TrackerService extends Service {
                                     obj.put("vehicle_name", sessionData.getDriverName());
                                     obj.put("route_id", sessionData.getRouteId());
                                     obj.put("route_name", sessionData.getRouteName());
-                                    obj.put("latitude", sessionData.getLatitude());
-                                    obj.put("longitude", sessionData.getLongitude());
-                                    obj.put("speed", sessionData.getSpeed());
-                                    obj.put("date", sessionData.getDate());
-                                    obj.put("state", sessionData.getState());
+                                    obj.put("latitude", location.getLatitude());
+                                    obj.put("longitude", location.getLongitude());
+                                    obj.put("speed", location.getSpeed());
+                                    obj.put("accuracy", location.getAccuracy());
+                                    obj.put("altitude", location.getAltitude());
+                                    obj.put("date", location.getTime());
+                                    obj.put("state", 1);
                                     obj.put("date", sessionData.getSocketUrl());
                                     obj.put("token", sessionData.getToken());
                                     if (mSocket.connected()) {

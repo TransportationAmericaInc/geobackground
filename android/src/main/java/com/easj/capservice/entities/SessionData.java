@@ -14,16 +14,6 @@ public class SessionData {
 
     private String routeName;
 
-    private Double latitude;
-
-    private Double longitude;
-
-    private Integer speed;
-
-    private String date;
-
-    private Integer state;
-
     private String socketUrl;
 
     private String eventNewPosition;
@@ -36,18 +26,13 @@ public class SessionData {
         super();
     }
 
-    public SessionData(String driverId, String driverName, String vehicleId, String vehicleName, String routeId, String routeName, Double latitude, Double longitude, Integer speed, String date, Integer state, String socketUrl, String eventNewPosition, String token) {
+    public SessionData(String driverId, String driverName, String vehicleId, String vehicleName, String routeId, String routeName, String socketUrl, String eventNewPosition, String token) {
         this.driverId = driverId;
         this.driverName = driverName;
         this.vehicleId = vehicleId;
         this.vehicleName = vehicleName;
         this.routeId = routeId;
         this.routeName = routeName;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.speed = speed;
-        this.date = date;
-        this.state = state;
         this.socketUrl = socketUrl;
         this.eventNewPosition = eventNewPosition;
         this.token = token;
@@ -99,46 +84,6 @@ public class SessionData {
 
     public void setRouteName(String routeName) {
         this.routeName = routeName;
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Integer getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(Integer speed) {
-        this.speed = speed;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
     }
 
     public String getSocketUrl() {
