@@ -48,7 +48,7 @@ public class TrackerPreferences implements ITrackerPreferences {
             editor.putString(DRIVER_ID, data.getDriverId());
             editor.putString(DRIVER_NAME, data.getDriverName());
             editor.putString(VEHICLE_ID, data.getVehicleId());
-            editor.putString(VEHICLE_NAME, data.getVehicleId());
+            editor.putString(VEHICLE_NAME, data.getVehicleName());
             editor.putString(ROUTE_ID, data.getRouteId());
             editor.putString(ROUTE_NAME, data.getRouteName());
             editor.putString(SOCKETURL, data.getSocketUrl());
