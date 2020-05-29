@@ -17,7 +17,7 @@ public class TrackerPreferences implements ITrackerPreferences {
     private static final String DRIVER_ID = CLASS_NAME + ".driverId";
     private static final String DRIVER_NAME = CLASS_NAME + ".driverName";
     private static final String VEHICLE_ID = CLASS_NAME + ".vehicleId";
-    private static final String VEHICLE_NAME = CLASS_NAME + ".driverName";
+    private static final String VEHICLE_NAME = CLASS_NAME + ".vehicleName";
     private static final String ROUTE_ID = CLASS_NAME + ".routeId";
     private static final String ROUTE_NAME = CLASS_NAME + ".routeName";
     private static final String SOCKETURL = CLASS_NAME + ".socketUrl";
