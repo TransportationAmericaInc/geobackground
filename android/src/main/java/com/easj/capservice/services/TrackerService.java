@@ -32,6 +32,7 @@ import com.github.nkzawa.socketio.client.Socket;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,7 +43,7 @@ public class TrackerService extends Service {
     private static final String CHANEL_ID = "com.easj.capservice";
 
     private TrackerPreferences preferences;
-    private ICloudDataSource dataSource;
+    //private ICloudDataSource dataSource;
     private SendLocation sendLocation;
     private SessionData sessionData;
     private Location location;
@@ -72,10 +73,11 @@ public class TrackerService extends Service {
                 mSocket = IO.socket(sessionData.getSocketUrl());
                 mSocket.connect();
                 mSocket.io().reconnection(true);
+                Log.d(SERVICE_NAME, "Connected to socket: " + sessionData.getSocketUrl());
             } catch (URISyntaxException e) {
                 Log.d(SERVICE_NAME, "Error socket: " + e.getMessage());
             }
-            dataSource = CloudDataSource.getInstance(sessionData.getSocketUrl());
+            // dataSource = CloudDataSource.getInstance(sessionData.getSocketUrl());
         }
         if (Build.VERSION.SDK_INT >= 26) {
             createChanelIdNotifications();
@@ -124,15 +126,17 @@ public class TrackerService extends Service {
                                     obj.put("speed", location.getSpeed());
                                     obj.put("accuracy", location.getAccuracy());
                                     obj.put("altitude", location.getAltitude());
-                                    obj.put("date", new Date().toString());
+                                    SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+                                    obj.put("date", curFormater.format(new Date()));
                                     obj.put("state", 1);
                                     obj.put("token", sessionData.getToken());
                                     if (mSocket.connected()) {
                                         Log.d(SERVICE_NAME, obj.toString());
                                         mSocket.emit(sessionData.getEventNewPosition(), obj);
                                         swToast = true;
-                                        Log.d(SERVICE_NAME, "Send Location Socket");
+                                        Log.d(SERVICE_NAME, "Send Location Socket: " + sessionData.getEventNewPosition());
                                     } else {
+                                        Log.d(SERVICE_NAME, "ReConnected to socket: " + sessionData.getSocketUrl());
                                         mSocket.connected();
                                     }
                                 }
