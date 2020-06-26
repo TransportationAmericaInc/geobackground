@@ -14,6 +14,8 @@ public class SessionData {
 
     private String routeName;
 
+    private String routeData;
+
     private String socketUrl;
 
     private String eventNewPosition;
@@ -26,16 +28,25 @@ public class SessionData {
         super();
     }
 
-    public SessionData(String driverId, String driverName, String vehicleId, String vehicleName, String routeId, String routeName, String socketUrl, String eventNewPosition, String token) {
+    public SessionData(String driverId, String driverName, String vehicleId, String vehicleName, String routeId, String routeName, String routeData, String socketUrl, String eventNewPosition, String token) {
         this.driverId = driverId;
         this.driverName = driverName;
         this.vehicleId = vehicleId;
         this.vehicleName = vehicleName;
         this.routeId = routeId;
         this.routeName = routeName;
+        this.routeData = routeData;
         this.socketUrl = socketUrl;
         this.eventNewPosition = eventNewPosition;
         this.token = token;
+    }
+
+    public String getRouteData() {
+        return routeData;
+    }
+
+    public void setRouteData(String routeData) {
+        this.routeData = routeData;
     }
 
     public String getDriverId() {
