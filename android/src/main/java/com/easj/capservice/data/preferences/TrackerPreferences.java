@@ -21,6 +21,8 @@ public class TrackerPreferences implements ITrackerPreferences {
     private static final String ROUTE_ID = CLASS_NAME + ".routeId";
     private static final String ROUTE_NAME = CLASS_NAME + ".routeName";
     private static final String ROUTE_DATA = CLASS_NAME + ".routeData";
+    private static final String STOPS = CLASS_NAME + ".stops";
+    private static final String LAST_STOP = CLASS_NAME + ".lastStop";
     private static final String SOCKETURL = CLASS_NAME + ".socketUrl";
     private static final String EVENTNEWPOSITION = CLASS_NAME + ".eventNewPosition";
     private static final String TOKEN = CLASS_NAME + ".token";
@@ -53,6 +55,8 @@ public class TrackerPreferences implements ITrackerPreferences {
             editor.putString(ROUTE_ID, data.getRouteId());
             editor.putString(ROUTE_NAME, data.getRouteName());
             editor.putString(ROUTE_DATA, data.getRouteData());
+            editor.putInt(STOPS, data.getStops());
+            editor.putInt(LAST_STOP, data.getLastStop());
             editor.putString(SOCKETURL, data.getSocketUrl());
             editor.putString(EVENTNEWPOSITION, data.getEventNewPosition());
             editor.putString(TOKEN, data.getToken());
@@ -91,6 +95,8 @@ public class TrackerPreferences implements ITrackerPreferences {
                 preferences.getString(ROUTE_ID, ""),
                 preferences.getString(ROUTE_NAME, ""),
                 preferences.getString(ROUTE_DATA, ""),
+                preferences.getInt(STOPS, 0),
+                preferences.getInt(LAST_STOP, 0),
                 preferences.getString(SOCKETURL, ""),
                 preferences.getString(EVENTNEWPOSITION, ""),
                 preferences.getString(TOKEN, "")

@@ -124,6 +124,8 @@ public class TrackerService extends Service {
                                     obj.put("route_data", sessionData.getRouteData());
                                     obj.put("latitude", location.getLatitude());
                                     obj.put("longitude", location.getLongitude());
+                                    obj.put("stops", location.getLongitude());
+                                    obj.put("longitude", location.getLongitude());
                                     obj.put("speed", location.getSpeed());
                                     obj.put("accuracy", location.getAccuracy());
                                     obj.put("altitude", location.getAltitude());

@@ -22,13 +22,17 @@ public class SessionData {
 
     private String token;
 
+    private Integer stops;
+
+    private Integer lastStop;
+
     private DriverStatus driverStatus;
 
     public SessionData() {
         super();
     }
 
-    public SessionData(String driverId, String driverName, String vehicleId, String vehicleName, String routeId, String routeName, String routeData, String socketUrl, String eventNewPosition, String token) {
+    public SessionData(String driverId, String driverName, String vehicleId, String vehicleName, String routeId, String routeName, String routeData, Integer stops, Integer lastStop, String socketUrl, String eventNewPosition, String token) {
         this.driverId = driverId;
         this.driverName = driverName;
         this.vehicleId = vehicleId;
@@ -36,6 +40,8 @@ public class SessionData {
         this.routeId = routeId;
         this.routeName = routeName;
         this.routeData = routeData;
+        this.stops = stops;
+        this.lastStop = lastStop;
         this.socketUrl = socketUrl;
         this.eventNewPosition = eventNewPosition;
         this.token = token;
@@ -95,6 +101,22 @@ public class SessionData {
 
     public void setRouteName(String routeName) {
         this.routeName = routeName;
+    }
+
+    public Integer getStops() {
+        return stops;
+    }
+
+    public void setStops(Integer stops) {
+        this.stops = stops;
+    }
+
+    public Integer getLastStop() {
+        return lastStop;
+    }
+
+    public void setLastStop(Integer lastStop) {
+        this.lastStop = lastStop;
     }
 
     public String getSocketUrl() {
