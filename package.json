@@ -1,6 +1,6 @@
 {
   "name": "geobackground-capacitor",
-  "version": "2.0.10",
+  "version": "2.0.19",
   "description": "Servicio de geolocalizacion en segundo plano",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

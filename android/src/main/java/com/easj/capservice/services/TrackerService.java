@@ -109,7 +109,7 @@ public class TrackerService extends Service {
                         if (bundle.getParcelable("com.google.android.location.LOCATION") != null) {
                             location = bundle.getParcelable("com.google.android.location.LOCATION");
                             if (location != null) {
-                                Log.i(SERVICE_NAME, "onHandleIntent " + location.getLatitude() + ", " + location.getLongitude());
+                                Log.i(SERVICE_NAME, "onHandleIntent last stop to " + sessionData.getLastStop() + ", " + sessionData.getDriverId());
                                 //Object[] object = new Object[4];
                                 preferences = TrackerPreferences.getInstance(getApplicationContext());
                                 sessionData = preferences.getSessionData();

@@ -32,8 +32,7 @@ public class TrackerPreferences implements ITrackerPreferences {
     private SharedPreferences preferences;
 
     public TrackerPreferences(Context context) {
-        preferences = context.getApplicationContext().getSharedPreferences(TRACKER_PREFS_NAME,
-                Context.MODE_PRIVATE);
+        preferences = context.getApplicationContext().getSharedPreferences(TRACKER_PREFS_NAME, Context.MODE_PRIVATE);
     }
 
     public static TrackerPreferences getInstance(Context context){

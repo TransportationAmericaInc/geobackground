@@ -144,6 +144,9 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
                 call.getInt("stops", 0),
                 call.getInt("last_stop", 0)
         );
+        JSObject ret = new JSObject();
+        ret.put("value", "Set Driver Info Stops");
+        call.resolve();
     }
 
     /* Setear cambio de estado del driver */
