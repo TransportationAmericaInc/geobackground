@@ -68,7 +68,6 @@ public class TrackerPreferences implements ITrackerPreferences {
     public void updateStopsInfo(Integer stops, Integer lastStop) {
         if (stops != null && lastStop!= null) {
             SharedPreferences.Editor editor = preferences.edit();
-            editor.clear();
             editor.putInt(STOPS, stops);
             editor.putInt(LAST_STOP, lastStop);
             editor.apply();
