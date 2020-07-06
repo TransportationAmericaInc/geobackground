@@ -134,6 +134,18 @@ public class CapBackground extends Plugin implements GoogleApiClient.ConnectionC
         call.resolve(ret);
     }
 
+
+    @PluginMethod()
+    public void setStopsInfo(PluginCall call) {
+        context = this.getContext();
+        activity = getActivity();
+        preferences = TrackerPreferences.getInstance(context);
+        preferences.updateStopsInfo(
+                call.getInt("stops", 0),
+                call.getInt("last_stop", 0)
+        );
+    }
+
     /* Setear cambio de estado del driver */
     @PluginMethod()
     public void setDriverStatus(PluginCall call) {

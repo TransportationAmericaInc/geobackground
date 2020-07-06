@@ -11,6 +11,8 @@ public interface ITrackerPreferences {
 
     void setDriverStatus(JSONObject driverStatus);
 
+    void updateStopsInfo(Integer stops, Integer lastStop);
+
     JSONObject getDriverStatus() throws JSONException;
 
     void clearData();
